@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./script.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Hotel Beira Mar</h2>
+        <form>
+            <div class="form-row">
+                <input type="text" name="nome" placeholder="Nome" id="nome" required>
+                <input type="text" name="cpf" placeholder="CPF" id="cpf" required>
+            </div>
+
+            <div class="form-row">
+                <input type="tel" name="fone" id="fone" placeholder="Telefone" required>
+                <input type="number" name="quarto" placeholder="Número do quarto" id="quarto" required>
+            </div>
+            <div class="form-row">
+                <input type="number" name="ValorDiaria" id="valorDiaria" placeholder="Valor da Diária" required>
+                <input type="number" name="dias" placeholder="Dias Reservados" id="dias" required>
+            </div>
+
+            <div class="form-row">
+                <input type="number" name="total" id="total" placeholder="Valor Total" readonly>
+                <input type="text" name="dataSaida" placeholder="Data de Saída" id="dataSaida" required>
+            </div>
+            <div class="form-row">
+                <select name="pagamento" id="pagamento" required>
+                    <option value="" disabled selected>Status De Pagamento</option>
+                    <option value="PAGO">Pago</option>
+                    <option value="PENDENTE">Pendente</option>                    
+                </select>
+                <select name="status" id="status" required>
+                    <option value="" disabled selected>Status Da Reserva</option>
+                    <option value="RESERVADO">Reservado</option>
+                   
+                </select>
+            </div>           
+            <div class="form-buttons">
+                <button type="button" class="submit-btn" onclick="validarFormulario()">Enviar</button>
+                <button type="button" class="reset-btn" onclick="window.location.href ='http://127.0.0.1:5500/tabela.html';">Consultar</button>
+            </div>
+        </form>
+    </div> 
+   
+  <script src="./script.js"></script>
+</body>
+</html>
