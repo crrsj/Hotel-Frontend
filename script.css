@@ -127,3 +127,24 @@ tfoot td {
     padding: 12px 15px;
     font-weight: bold;
 }
+
+.botao-verde {
+    background-color: #28a745; /* Cor verde personalizada */
+    color: white;              /* Texto branco */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    float: left;
+    margin-left: 10%;
+}
+
+.botao-verde:hover {
+    background-color: #218838; /* Verde mais escuro ao passar o cursor */
+}
+
+.button-container {
+    margin-top: 20px;          /* Espaço acima do botão */
+    width: 100%;        /* Alinha o botão à esquerda */
+}

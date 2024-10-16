@@ -1,6 +1,7 @@
 function cadastrarRegistro(nome,fone,cpf,quarto,valorDiaria,dias,pagamento,dataSaida,status) {
     
     // Captura os valores do formulário
+    
     var  nome = document.getElementById("nome").value;
     var  fone = document.getElementById("fone").value;
     var  cpf = document.getElementById("cpf").value;
@@ -15,6 +16,7 @@ function cadastrarRegistro(nome,fone,cpf,quarto,valorDiaria,dias,pagamento,dataS
    
     // Cria um objeto com os dados a serem enviados
     var data = {
+        
         nome: nome,
         fone: fone,
         cpf: cpf,
@@ -50,7 +52,7 @@ function cadastrarRegistro(nome,fone,cpf,quarto,valorDiaria,dias,pagamento,dataS
     .catch(error => {
         console.error('Erro:', error);
     });
-     
+    
      document.getElementById("nome").value ="";
      document.getElementById("fone").value ="";
      document.getElementById("cpf").value ="";
@@ -137,17 +139,18 @@ function cadastrarRegistro(nome,fone,cpf,quarto,valorDiaria,dias,pagamento,dataS
       data.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${item.id}</td>
+          <td><a href="#" onclick="buscarDados(${item.id});">${item.id}</a></td>
           <td>${item.dataEntrada}</td>          
-          <td><a href="#" onclick = >${item.nome}</a></td>       
+          <td>${item.nome}</td>       
           <td>${item.fone}</td>        
           <td>${item.quarto}</td>
           <td>${item.valorDiaria}</td>
           <td>${item.dias}</td>
           <td>${item.total}</td> 
           <td>${item.pagamento}</td> 
-          <td>${item.dataSaida}</td> 
+          <td>${item.dataSaida}</td>           
           <td>${item.status}</td> `;
+        
           
           tbody.appendChild(row);
       });
@@ -160,25 +163,113 @@ function cadastrarRegistro(nome,fone,cpf,quarto,valorDiaria,dias,pagamento,dataS
    fetchDataAndPopulateTable();
 });
  
-function preencherFormulario(user) {
-    document.getElementById('id').value = user.id;
-    document.getElementById('dataEntrada').value = user.dataEntrada;
-    document.getElementById('nome').value = user.nome;
-    document.getElementById('fone').value = user.fone;  
-    document.getElementById('quarto').value = user.quarto;
-    document.getElementById('valorDiaria').value = user.valorDiaria;
-    document.getElementById('dias').value = user.dias;
-    document.getElementById('total').value = user.total; 
-    document.getElementById('pagamento').value = user.pagamento;
-    document.getElementById('dataSaida').value = user.dataSaida;
-    document.getElementById('status').value = user.status;
 
+      async function buscarDados(id) {
+        try { 
+            // URL da API, substitua pela sua URL
+            const response = await fetch(`http://localhost:8080/hotel/${id}`);
+
+            // Verifica se a resposta foi bem-sucedida
+            if (!response.ok) {
+                throw new Error('Erro ao buscar dados');
+            }
+
+            // Converte a resposta em JSON
+            const data = await response.json();
+            openModal();
+
+   
+
+    document.getElementById('id').value = data.id;
+    document.getElementById('dataEntrada').value = data.dataEntrada;
+    document.getElementById('nome').value = data.nome;
+    document.getElementById('fone').value = data.fone;  
+    document.getElementById('quarto').value = data.quarto;
+    document.getElementById('valorDiaria').value = data.valorDiaria;
+    document.getElementById('dias').value = data.dias;
+    document.getElementById('total').value = data.total; 
+    document.getElementById('pagamento').value = data.pagamento;
+    document.getElementById('dataSaida').value = data.dataSaida;
+    document.getElementById('status').value = data.status;
+
+ 
+} catch (error) {
+    console.error('Erro:', error);
  }
- function buscarPorId(id) {
-    fetch('http://localhost:8080/hotel/' + id)
-      .then(response => response.json())
-      .then(user => {
-        preencherFormulario(user) ;
-      })
-      .catch(error => console.error('Error fetching user data:', error));
+}
+        
+
+  function openModal() {
+    
+    // Seleciona o modal pelo ID
+    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    
+    // Abre o modal
+    myModal.show();
+
+}
+
+async function updateUserData() {    
+    const idInput = document.getElementById('id');    
+    const foneInput = document.getElementById('fone');
+    const pagamentoInput = document.getElementById('pagamento');    
+    
+      
+    const updateId =  idInput.value   
+    const updateFone = foneInput.value
+    const updatePagamento = pagamentoInput.value    
+    
+  
+    try {
+      const response = await fetch(`http://localhost:8080/hotel`, {
+        method: 'PUT', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: updateId,        
+          fone: updateFone,
+          pagamento: updatePagamento
+         
+          
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+  
+      alert('Dados da reserva atualizados com sucesso!');
+      fetchDataAndPopulateTable();          
+    } catch (error) {
+      console.error(`Erro durante a atualização da reserva: ${error.message}`);
+    }
+    document.getElementById("nome").value = "";
+    document.getElementById("fone").value ="";
+    document.getElementById("pagamento").value ="";
+    
   }
+
+  async function deletarRegistro(id) {
+    try {
+      // Substitua 'URL_DA_SUA_API' pela URL real da sua API para deletar
+      const response = await fetch(`http://localhost:8080/hotel/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // Adicione cabeçalhos adicionais, se necessário
+        },
+      });
+        //alert("Tem certeza que deseja deletar esta resercva?");
+      if (response.ok) {
+        console.log(`Registro com ID ${id} deletado com sucesso.`);
+        // Atualiza a tabela após a exclusão
+        fetchDataAndPopulateTable();
+      } else {
+        console.error('Erro ao deletar registro:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Erro ao deletar registro:', error);
+    }
+  }
+   
